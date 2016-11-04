@@ -411,10 +411,10 @@ $hasMinorProblems = (bool) count($minorProblems);
                             </ol>
                         <?php endif; ?>
 
-                        <?php if ($symfonyRequirements->hasPhpIniConfigIssue()): ?>
+                        <?php if ($symfonyRequirements->hasPhpConfigIssue()): ?>
                             <p id="phpini">*
-                                <?php if ($symfonyRequirements->getPhpIniConfigPath()): ?>
-                                    Changes to the <strong>php.ini</strong> file must be done in "<strong><?php echo $symfonyRequirements->getPhpIniConfigPath() ?></strong>".
+                                <?php if ($symfonyRequirements->getPhpIniPath()): ?>
+                                    Changes to the <strong>php.ini</strong> file must be done in "<strong><?php echo $symfonyRequirements->getPhpIniPath() ?></strong>".
                                 <?php else: ?>
                                     To change settings, create a "<strong>php.ini</strong>".
                                 <?php endif; ?>

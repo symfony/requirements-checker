@@ -70,7 +70,7 @@ class RequirementCollection implements \IteratorAggregate
     }
 
     /**
-     * Adds a mandatory requirement in form of a php.ini configuration.
+     * Adds a mandatory requirement in form of a PHP configuration option.
      *
      * @param string        $cfgName           The configuration name used for ini_get()
      * @param bool|callback $evaluation        Either a boolean indicating whether the configuration should evaluate to true or false,
@@ -82,13 +82,13 @@ class RequirementCollection implements \IteratorAggregate
      * @param string        $helpHtml          The help text formatted in HTML for resolving the problem (when null and $evaluation is a boolean a default help is derived)
      * @param string|null   $helpText          The help text (when null, it will be inferred from $helpHtml, i.e. stripped from HTML tags)
      */
-    public function addPhpIniRequirement($cfgName, $evaluation, $approveCfgAbsence = false, $testMessage = null, $helpHtml = null, $helpText = null)
+    public function addPhpConfigRequirement($cfgName, $evaluation, $approveCfgAbsence = false, $testMessage = null, $helpHtml = null, $helpText = null)
     {
-        $this->add(new PhpIniRequirement($cfgName, $evaluation, $approveCfgAbsence, $testMessage, $helpHtml, $helpText, false));
+        $this->add(new PhpConfigRequirement($cfgName, $evaluation, $approveCfgAbsence, $testMessage, $helpHtml, $helpText, false));
     }
 
     /**
-     * Adds an optional recommendation in form of a php.ini configuration.
+     * Adds an optional recommendation in form of a PHP configuration option.
      *
      * @param string        $cfgName           The configuration name used for ini_get()
      * @param bool|callback $evaluation        Either a boolean indicating whether the configuration should evaluate to true or false,
@@ -100,9 +100,9 @@ class RequirementCollection implements \IteratorAggregate
      * @param string        $helpHtml          The help text formatted in HTML for resolving the problem (when null and $evaluation is a boolean a default help is derived)
      * @param string|null   $helpText          The help text (when null, it will be inferred from $helpHtml, i.e. stripped from HTML tags)
      */
-    public function addPhpIniRecommendation($cfgName, $evaluation, $approveCfgAbsence = false, $testMessage = null, $helpHtml = null, $helpText = null)
+    public function addPhpConfigRecommendation($cfgName, $evaluation, $approveCfgAbsence = false, $testMessage = null, $helpHtml = null, $helpText = null)
     {
-        $this->add(new PhpIniRequirement($cfgName, $evaluation, $approveCfgAbsence, $testMessage, $helpHtml, $helpText, true));
+        $this->add(new PhpConfigRequirement($cfgName, $evaluation, $approveCfgAbsence, $testMessage, $helpHtml, $helpText, true));
     }
 
     /**
@@ -194,14 +194,14 @@ class RequirementCollection implements \IteratorAggregate
     }
 
     /**
-     * Returns whether a php.ini configuration is not correct.
+     * Returns whether a PHP configuration option is not correct.
      *
      * @return bool php.ini configuration problem?
      */
-    public function hasPhpIniConfigIssue()
+    public function hasPhpConfigIssue()
     {
         foreach ($this->requirements as $req) {
-            if (!$req->isFulfilled() && $req instanceof PhpIniRequirement) {
+            if (!$req->isFulfilled() && $req instanceof PhpConfigRequirement) {
                 return true;
             }
         }
@@ -214,7 +214,7 @@ class RequirementCollection implements \IteratorAggregate
      *
      * @return string|false php.ini file path
      */
-    public function getPhpIniConfigPath()
+    public function getPhpIniPath()
     {
         return get_cfg_var('cfg_file_path');
     }

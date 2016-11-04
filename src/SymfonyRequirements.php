@@ -68,7 +68,7 @@ class SymfonyRequirements extends RequirementCollection
         );
 
         if (version_compare($installedPhpVersion, '7.0.0', '<')) {
-            $this->addPhpIniRequirement(
+            $this->addPhpConfigRequirement(
                 'date.timezone', true, false,
                 'date.timezone setting must be set',
                 'Set the "<strong>date.timezone</strong>" setting in php.ini<a href="#phpini">*</a> (like Europe/Paris).'
@@ -142,10 +142,10 @@ class SymfonyRequirements extends RequirementCollection
             }
         }
 
-        $this->addPhpIniRequirement('detect_unicode', false);
+        $this->addPhpConfigRequirement('detect_unicode', false);
 
         if (extension_loaded('suhosin')) {
-            $this->addPhpIniRequirement(
+            $this->addPhpConfigRequirement(
                 'suhosin.executor.include.whitelist',
                 create_function('$cfgValue', 'return false !== stripos($cfgValue, "phar");'),
                 false,
@@ -155,15 +155,15 @@ class SymfonyRequirements extends RequirementCollection
         }
 
         if (extension_loaded('xdebug')) {
-            $this->addPhpIniRequirement(
+            $this->addPhpConfigRequirement(
                 'xdebug.show_exception_trace', false, true
             );
 
-            $this->addPhpIniRequirement(
+            $this->addPhpConfigRequirement(
                 'xdebug.scream', false, true
             );
 
-            $this->addPhpIniRecommendation(
+            $this->addPhpConfigRecommendation(
                 'xdebug.max_nesting_level',
                 create_function('$cfgValue', 'return $cfgValue > 100;'),
                 true,
@@ -181,7 +181,7 @@ class SymfonyRequirements extends RequirementCollection
         );
 
         if (extension_loaded('mbstring')) {
-            $this->addPhpIniRequirement(
+            $this->addPhpConfigRequirement(
                 'mbstring.func_overload',
                 create_function('$cfgValue', 'return (int) $cfgValue === 0;'),
                 true,
@@ -319,7 +319,7 @@ class SymfonyRequirements extends RequirementCollection
                 }
             }
 
-            $this->addPhpIniRecommendation(
+            $this->addPhpConfigRecommendation(
                 'intl.error_level',
                 create_function('$cfgValue', 'return (int) $cfgValue === 0;'),
                 true,
@@ -356,13 +356,13 @@ class SymfonyRequirements extends RequirementCollection
             );
         }
 
-        $this->addPhpIniRecommendation('short_open_tag', false);
+        $this->addPhpConfigRecommendation('short_open_tag', false);
 
-        $this->addPhpIniRecommendation('magic_quotes_gpc', false, true);
+        $this->addPhpConfigRecommendation('magic_quotes_gpc', false, true);
 
-        $this->addPhpIniRecommendation('register_globals', false, true);
+        $this->addPhpConfigRecommendation('register_globals', false, true);
 
-        $this->addPhpIniRecommendation('session.auto_start', false);
+        $this->addPhpConfigRecommendation('session.auto_start', false);
 
         $this->addRecommendation(
             class_exists('PDO'),

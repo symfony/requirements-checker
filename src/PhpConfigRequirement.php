@@ -12,11 +12,11 @@
 namespace Symfony\Requirements;
 
 /**
- * Represents a PHP requirement in form of a php.ini configuration.
+ * Represents a requirement in form of a PHP configuration option.
  *
  * @author Tobias Schultze <http://tobion.de>
  */
-class PhpIniRequirement extends Requirement
+class PhpConfigRequirement extends Requirement
 {
     /**
      * Constructor that initializes the requirement.
