@@ -20,7 +20,6 @@ namespace Symfony\Requirements;
  */
 class SymfonyRequirements extends RequirementCollection
 {
-    const LEGACY_REQUIRED_PHP_VERSION = '5.3.3';
     const REQUIRED_PHP_VERSION = '5.5.9';
 
     /**
@@ -31,25 +30,15 @@ class SymfonyRequirements extends RequirementCollection
         /* mandatory requirements follow */
 
         $installedPhpVersion = phpversion();
-        $requiredPhpVersion = $this->getPhpRequiredVersion();
 
-        $this->addRecommendation(
-            $requiredPhpVersion,
-            'Vendors should be installed in order to check all requirements.',
-            'Run the <code>composer install</code> command.',
-            'Run the "composer install" command.'
+        $this->addRequirement(
+            version_compare($installedPhpVersion, self::REQUIRED_PHP_VERSION, '>='),
+            sprintf('PHP version must be at least %s (%s installed)', self::REQUIRED_PHP_VERSION, $installedPhpVersion),
+            sprintf('You are running PHP version "<strong>%s</strong>", but Symfony needs at least PHP "<strong>%s</strong>" to run.
+            Before using Symfony, upgrade your PHP installation, preferably to the latest version.',
+                $installedPhpVersion, self::REQUIRED_PHP_VERSION),
+            sprintf('Install PHP %s or newer (installed version is %s)', self::REQUIRED_PHP_VERSION, $installedPhpVersion)
         );
-
-        if (false !== $requiredPhpVersion) {
-            $this->addRequirement(
-                version_compare($installedPhpVersion, $requiredPhpVersion, '>='),
-                sprintf('PHP version must be at least %s (%s installed)', $requiredPhpVersion, $installedPhpVersion),
-                sprintf('You are running PHP version "<strong>%s</strong>", but Symfony needs at least PHP "<strong>%s</strong>" to run.
-                Before using Symfony, upgrade your PHP installation, preferably to the latest version.',
-                    $installedPhpVersion, $requiredPhpVersion),
-                sprintf('Install PHP %s or newer (installed version is %s)', $requiredPhpVersion, $installedPhpVersion)
-            );
-        }
 
         $this->addRequirement(
             version_compare($installedPhpVersion, '5.3.16', '!='),
@@ -64,20 +53,18 @@ class SymfonyRequirements extends RequirementCollection
                 'Then run "<strong>php composer.phar install</strong>" to install them.'
         );
 
-        $cacheDir = is_dir(__DIR__.'/../var/cache') ? __DIR__.'/../var/cache' : __DIR__.'/cache';
-
+        $cacheDir = __DIR__.'/../var/cache';
         $this->addRequirement(
             is_writable($cacheDir),
-            'app/cache/ or var/cache/ directory must be writable',
-            'Change the permissions of either "<strong>app/cache/</strong>" or  "<strong>var/cache/</strong>" directory so that the web server can write into it.'
+            'var/cache/ directory must be writable',
+            'Change the permissions of "<strong>var/cache/</strong>" directory so that the web server can write into it.'
         );
 
-        $logsDir = is_dir(__DIR__.'/../var/logs') ? __DIR__.'/../var/logs' : __DIR__.'/logs';
-
+        $logsDir = __DIR__.'/../var/logs';
         $this->addRequirement(
             is_writable($logsDir),
-            'app/logs/ or var/logs/ directory must be writable',
-            'Change the permissions of either "<strong>app/logs/</strong>" or  "<strong>var/logs/</strong>" directory so that the web server can write into it.'
+            'var/logs/ directory must be writable',
+            'Change the permissions of "<strong>var/logs/</strong>" directory so that the web server can write into it.'
         );
 
         if (version_compare($installedPhpVersion, '7.0.0', '<')) {
@@ -88,9 +75,9 @@ class SymfonyRequirements extends RequirementCollection
             );
         }
 
-        if (false !== $requiredPhpVersion && version_compare($installedPhpVersion, $requiredPhpVersion, '>=')) {
+        if (version_compare($installedPhpVersion, self::REQUIRED_PHP_VERSION, '>=')) {
             $timezones = array();
-            foreach (DateTimeZone::listAbbreviations() as $abbreviations) {
+            foreach (\DateTimeZone::listAbbreviations() as $abbreviations) {
                 foreach ($abbreviations as $abbreviation) {
                     $timezones[$abbreviation['timezone_id']] = true;
                 }
@@ -415,29 +402,5 @@ class SymfonyRequirements extends RequirementCollection
             default:
                 return (int) $size;
         }
-    }
-
-    /**
-     * Defines PHP required version from Symfony version.
-     *
-     * @return string|false The PHP required version or false if it could not be guessed
-     */
-    protected function getPhpRequiredVersion()
-    {
-        if (!file_exists($path = __DIR__.'/../composer.lock')) {
-            return false;
-        }
-
-        $composerLock = json_decode(file_get_contents($path), true);
-        foreach ($composerLock['packages'] as $package) {
-            $name = $package['name'];
-            if ('symfony/symfony' !== $name && 'symfony/http-kernel' !== $name) {
-                continue;
-            }
-
-            return (int) $package['version'][1] > 2 ? self::REQUIRED_PHP_VERSION : self::LEGACY_REQUIRED_PHP_VERSION;
-        }
-
-        return false;
     }
 }
