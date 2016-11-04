@@ -14,7 +14,8 @@ namespace Symfony\Requirements;
 /**
  * Represents a single PHP requirement, e.g. an installed extension.
  * It can be a mandatory requirement or an optional recommendation.
- * There is a special subclass, named PhpIniRequirement, to check a php.ini configuration.
+ * There is a special subclass, named PhpConfigRequirement, to check a PHP
+ * configuration option.
  *
  * @author Tobias Schultze <http://tobion.de>
  */
