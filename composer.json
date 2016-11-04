@@ -1,0 +1,24 @@
+{
+    "name": "symfony/requirements",
+    "description": "Requirements and recommendations for Symfony",
+    "keywords": ["distribution","configuration"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.9"
+    },
+    "autoload": {
+        "psr-4": { "Symfony\\Requirements\\": "src/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
