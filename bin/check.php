@@ -31,7 +31,7 @@ if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
 }
 
 $lineSize = 70;
-$symfonyRequirements = new SymfonyRequirements();
+$symfonyRequirements = new SymfonyRequirements(dirname(dirname(realpath($autoloader))));
 $iniPath = $symfonyRequirements->getPhpIniPath();
 
 echo_title('Symfony Requirements Checker');

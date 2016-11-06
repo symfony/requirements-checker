@@ -22,14 +22,13 @@ class SymfonyRequirements extends RequirementCollection
 {
     const REQUIRED_PHP_VERSION = '5.5.9';
 
-    /**
-     * Constructor that initializes the requirements.
-     */
-    public function __construct()
+    public function __construct($rootDir)
     {
         /* mandatory requirements follow */
 
         $installedPhpVersion = phpversion();
+
+        $rootDir = $this->getComposerRootDir($rootDir);
 
         $this->addRequirement(
             version_compare($installedPhpVersion, self::REQUIRED_PHP_VERSION, '>='),
@@ -47,20 +46,20 @@ class SymfonyRequirements extends RequirementCollection
         );
 
         $this->addRequirement(
-            is_dir(__DIR__.'/../vendor/composer'),
+            is_dir($rootDir.'/vendor/composer'),
             'Vendor libraries must be installed',
             'Vendor libraries are missing. Install composer following instructions from <a href="http://getcomposer.org/">http://getcomposer.org/</a>. '.
                 'Then run "<strong>php composer.phar install</strong>" to install them.'
         );
 
-        $cacheDir = __DIR__.'/../var/cache';
+        $cacheDir = $rootDir.'/var/cache';
         $this->addRequirement(
             is_writable($cacheDir),
             'var/cache/ directory must be writable',
             'Change the permissions of "<strong>var/cache/</strong>" directory so that the web server can write into it.'
         );
 
-        $logsDir = __DIR__.'/../var/logs';
+        $logsDir = $rootDir.'/var/logs';
         $this->addRequirement(
             is_writable($logsDir),
             'var/logs/ directory must be writable',
@@ -387,7 +386,7 @@ class SymfonyRequirements extends RequirementCollection
      *
      * @return int
      */
-    protected function getRealpathCacheSize()
+    private function getRealpathCacheSize()
     {
         $size = ini_get('realpath_cache_size');
         $size = trim($size);
@@ -403,4 +402,18 @@ class SymfonyRequirements extends RequirementCollection
                 return (int) $size;
         }
     }
-}
+
+    private function getComposerRootDir($rootDir)
+    {
+        $dir = $rootDir;
+        while (!file_exists($dir.'/composer.json')) {
+            if ($dir === dirname($dir)) {
+                return $rootDir;
+            }
+
+            $dir = dirname($dir);
+        }
+
+        return $dir;
+    }
+ }
