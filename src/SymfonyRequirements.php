@@ -29,6 +29,7 @@ class SymfonyRequirements extends RequirementCollection
         $installedPhpVersion = phpversion();
 
         $rootDir = $this->getComposerRootDir($rootDir);
+        $options = $this->readComposer($rootDir);
 
         $this->addRequirement(
             version_compare($installedPhpVersion, self::REQUIRED_PHP_VERSION, '>='),
@@ -52,18 +53,18 @@ class SymfonyRequirements extends RequirementCollection
                 'Then run "<strong>php composer.phar install</strong>" to install them.'
         );
 
-        $cacheDir = $rootDir.'/var/cache';
+        $cacheDir = $rootDir.'/'.$options['var-dir'].'/cache';
         $this->addRequirement(
             is_writable($cacheDir),
-            'var/cache/ directory must be writable',
-            'Change the permissions of "<strong>var/cache/</strong>" directory so that the web server can write into it.'
+            sprintf('%s/cache/ directory must be writable', $options['var-dir']),
+            sprintf('Change the permissions of "<strong>%s/cache/</strong>" directory so that the web server can write into it.', $options['var-dir'])
         );
 
-        $logsDir = $rootDir.'/var/logs';
+        $logsDir = $rootDir.'/'.$options['var-dir'].'/logs';
         $this->addRequirement(
             is_writable($logsDir),
-            'var/logs/ directory must be writable',
-            'Change the permissions of "<strong>var/logs/</strong>" directory so that the web server can write into it.'
+            sprintf('%s/logs/ directory must be writable', $options['var-dir']),
+            sprintf('Change the permissions of "<strong>%s/logs/</strong>" directory so that the web server can write into it.', $options['var-dir'])
         );
 
         if (version_compare($installedPhpVersion, '7.0.0', '<')) {
@@ -415,5 +416,29 @@ class SymfonyRequirements extends RequirementCollection
         }
 
         return $dir;
+    }
+
+    private function readComposer($rootDir)
+    {
+        $composer = json_decode(file_get_contents($rootDir.'/composer.json'), true);
+        $options = array(
+            'bin-dir' => 'bin',
+            'conf-dir' => 'conf',
+            'etc-dir' => 'etc',
+            'src-dir' => 'src',
+            'var-dir' => 'var',
+            'web-dir' => 'web',
+        );
+
+        foreach (array_keys($options) as $key) {
+            if (isset($composer['extra'][$key])) {
+                $options[$key] = $composer['extra'][$key];
+            } elseif (isset($composer['extra']['symfony-'.$key])) {
+                $options[$key] = $composer['extra']['symfony-'.$key];
+            }
+
+        }
+
+        return $options;
     }
  }
