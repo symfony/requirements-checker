@@ -1,6 +1,6 @@
 {
-    "name": "symfony/requirements",
-    "description": "Requirements and recommendations for Symfony",
+    "name": "symfony/requirements-checker",
+    "description": "Check Symfony requirements and give recommendations",
     "keywords": ["distribution","configuration"],
     "type": "library",
     "license": "MIT",
