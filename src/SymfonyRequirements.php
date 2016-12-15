@@ -331,7 +331,7 @@ class SymfonyRequirements extends RequirementCollection
         $accelerator =
             (extension_loaded('eaccelerator') && ini_get('eaccelerator.enable'))
             ||
-            (extension_loaded('apc') && ini_get('apc.enabled'))
+            ((extension_loaded('apc') || extension_loaded('apcu')) && ini_get('apc.enabled'))
             ||
             (extension_loaded('Zend Optimizer+') && ini_get('zend_optimizerplus.enable'))
             ||
