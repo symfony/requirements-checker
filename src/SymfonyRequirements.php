@@ -279,7 +279,7 @@ class SymfonyRequirements extends RequirementCollection
         if (extension_loaded('intl')) {
             // in some WAMP server installations, new Collator() returns null
             $this->addRecommendation(
-                null !== new Collator('fr_FR'),
+                null !== new \Collator('fr_FR'),
                 'intl extension should be correctly configured',
                 'The intl extension does not behave properly. This problem is typical on PHP 5.3.X x64 WIN builds.'
             );
@@ -288,7 +288,7 @@ class SymfonyRequirements extends RequirementCollection
             if (defined('INTL_ICU_VERSION')) {
                 $version = INTL_ICU_VERSION;
             } else {
-                $reflector = new ReflectionExtension('intl');
+                $reflector = new \ReflectionExtension('intl');
 
                 ob_start();
                 $reflector->info();
