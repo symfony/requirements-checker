@@ -53,19 +53,21 @@ class SymfonyRequirements extends RequirementCollection
                 'Then run "<strong>php composer.phar install</strong>" to install them.'
         );
 
-        $cacheDir = $rootDir.'/'.$options['var-dir'].'/cache';
-        $this->addRequirement(
-            is_writable($cacheDir),
-            sprintf('%s/cache/ directory must be writable', $options['var-dir']),
-            sprintf('Change the permissions of "<strong>%s/cache/</strong>" directory so that the web server can write into it.', $options['var-dir'])
-        );
+        if (is_dir($cacheDir = $rootDir.'/'.$options['var-dir'].'/cache')) {
+            $this->addRequirement(
+                is_writable($cacheDir),
+                sprintf('%s/cache/ directory must be writable', $options['var-dir']),
+                sprintf('Change the permissions of "<strong>%s/cache/</strong>" directory so that the web server can write into it.', $options['var-dir'])
+            );
+        }
 
-        $logsDir = $rootDir.'/'.$options['var-dir'].'/logs';
-        $this->addRequirement(
-            is_writable($logsDir),
-            sprintf('%s/logs/ directory must be writable', $options['var-dir']),
-            sprintf('Change the permissions of "<strong>%s/logs/</strong>" directory so that the web server can write into it.', $options['var-dir'])
-        );
+        if (is_dir($logsDir = $rootDir.'/'.$options['var-dir'].'/logs')) {
+            $this->addRequirement(
+                is_writable($logsDir),
+                sprintf('%s/logs/ directory must be writable', $options['var-dir']),
+                sprintf('Change the permissions of "<strong>%s/logs/</strong>" directory so that the web server can write into it.', $options['var-dir'])
+            );
+        }
 
         if (version_compare($installedPhpVersion, '7.0.0', '<')) {
             $this->addPhpConfigRequirement(
