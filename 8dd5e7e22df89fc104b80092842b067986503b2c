@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2017-04-05T14:02:58Z
+
+Actually this is not true anymore. Those files are managed by Flex, so I think it's safe to remove the comments.
+
+---------------------------------------------------------------------------
+
+by dunglas at 2017-04-05T14:12:17Z
+
+Done.
