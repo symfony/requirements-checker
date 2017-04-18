@@ -358,8 +358,6 @@ class SymfonyRequirements extends RequirementCollection
             );
         }
 
-        $this->addPhpConfigRecommendation('short_open_tag', false);
-
         $this->addPhpConfigRecommendation('magic_quotes_gpc', false, true);
 
         $this->addPhpConfigRecommendation('register_globals', false, true);
