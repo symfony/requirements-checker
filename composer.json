@@ -13,6 +13,9 @@
     "require": {
         "php": ">=5.3.9"
     },
+    "bin": [
+        "bin/requirements-checker"
+    ],
     "autoload": {
         "psr-4": { "Symfony\\Requirements\\": "src/" }
     },
