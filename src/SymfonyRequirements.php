@@ -427,7 +427,7 @@ class SymfonyRequirements extends RequirementCollection
             'etc-dir' => 'etc',
             'src-dir' => 'src',
             'var-dir' => 'var',
-            'web-dir' => 'public',
+            'public-dir' => 'public',
         );
 
         foreach (array_keys($options) as $key) {
