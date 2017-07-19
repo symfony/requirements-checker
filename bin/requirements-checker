@@ -1,4 +1,4 @@
 #!/usr/bin/env php
 <?php
 
-include('check.php');
+include('requirements-checker.php');
