@@ -1,0 +1,23 @@
+---------------------------------------------------------------------------
+
+by deguif at 2017-08-07T09:21:44Z
+
+`create_function` should be deprecated starting from `PHP 7.2`, that PR also ensures compatibility with `PHP 8.0`
+
+---------------------------------------------------------------------------
+
+by chalasr at 2017-09-30T17:16:20Z
+
+👍
+
+Current output when using e.g. `symfony/installer` with php 7.2
+
+>  Preparing project...
+
+> PHP Deprecated:  Function create_function() is deprecated in /Volumes/HD/Sites/tests/lazy-command-defaultname/var/SymfonyRequirements.php on line 558
+
+> Deprecated: Function create_function() is deprecated in /Volumes/HD/Sites/tests/lazy-command-defaultname/var/SymfonyRequirements.php on line 558
+PHP Deprecated:  Function create_function() is deprecated in /Volumes/HD/Sites/tests/lazy-command-defaultname/var/SymfonyRequirements.php on line 707
+
+> Deprecated: Function create_function() is deprecated in /Volumes/HD/Sites/tests/lazy-command-defaultname/var/SymfonyRequirements.php on line 707
+ ✔  Symfony 3.3.9 was successfully installed.
