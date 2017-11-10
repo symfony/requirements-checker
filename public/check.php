@@ -417,7 +417,7 @@ $hasMinorProblems = (bool) count($minorProblems);
 
                         <ul class="symfony-install-continue">
                             <?php if ($hasMajorProblems || $hasMinorProblems): ?>
-                                <li><a href="config.php">Re-check configuration</a></li>
+                                <li><a href="check.php">Re-check configuration</a></li>
                             <?php endif; ?>
                         </ul>
                     </div>
