@@ -30,7 +30,7 @@ class RequirementCollection implements \IteratorAggregate
      */
     public function getIterator()
     {
-        return new ArrayIterator($this->requirements);
+        return new \ArrayIterator($this->requirements);
     }
 
     /**
