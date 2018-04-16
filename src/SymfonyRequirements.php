@@ -61,11 +61,11 @@ class SymfonyRequirements extends RequirementCollection
             );
         }
 
-        if (is_dir($logsDir = $rootDir.'/'.$options['var-dir'].'/logs')) {
+        if (is_dir($logsDir = $rootDir.'/'.$options['var-dir'].'/log')) {
             $this->addRequirement(
                 is_writable($logsDir),
-                sprintf('%s/logs/ directory must be writable', $options['var-dir']),
-                sprintf('Change the permissions of "<strong>%s/logs/</strong>" directory so that the web server can write into it.', $options['var-dir'])
+                sprintf('%s/log/ directory must be writable', $options['var-dir']),
+                sprintf('Change the permissions of "<strong>%s/log/</strong>" directory so that the web server can write into it.', $options['var-dir'])
             );
         }
 
