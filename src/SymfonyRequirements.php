@@ -322,6 +322,14 @@ class SymfonyRequirements extends RequirementCollection
 
         $this->addPhpConfigRecommendation('session.auto_start', false);
 
+        $this->addPhpConfigRecommendation('post_max_size', function () {
+            return ini_get('post_max_size') < ini_get('memory_limit');
+        }, true, '"memory_limit" should be superior than "post_max_size".');
+
+        $this->addPhpConfigRecommendation('upload_max_filesize', function () {
+            return ini_get('upload_max_filesize') < ini_get('post_max_size');
+        }, true, '"post_max_size" should be superior than "upload_max_filesize".');
+
         $this->addRecommendation(
             class_exists('PDO'),
             'PDO should be installed',
