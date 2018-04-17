@@ -322,13 +322,29 @@ class SymfonyRequirements extends RequirementCollection
 
         $this->addPhpConfigRecommendation('session.auto_start', false);
 
-        $this->addPhpConfigRecommendation('post_max_size', function () {
-            return ini_get('post_max_size') < ini_get('memory_limit');
-        }, true, '"memory_limit" should be greater than "post_max_size".');
+        $this->addPhpConfigRecommendation(
+            'xdebug.max_nesting_level',
+            function ($cfgValue) { return $cfgValue > 100; },
+            true,
+            'xdebug.max_nesting_level should be above 100 in php.ini',
+            'Set "<strong>xdebug.max_nesting_level</strong>" to e.g. "<strong>250</strong>" in php.ini<a href="#phpini">*</a> to stop Xdebug\'s infinite recursion protection erroneously throwing a fatal error in your project.'
+        );
 
-        $this->addPhpConfigRecommendation('upload_max_filesize', function () {
-            return ini_get('upload_max_filesize') < ini_get('post_max_size');
-        }, true, '"post_max_size" should be greater than "upload_max_filesize".');
+        $this->addPhpConfigRecommendation(
+            'post_max_size',
+            function () { return ini_get('post_max_size') < ini_get('memory_limit'); },
+            true,
+            '"memory_limit" should be greater than "post_max_size".',
+            'Set "<strong>memory_limit</strong>" to be greater than "<strong>post_max_size</strong>".'
+        );
+
+        $this->addPhpConfigRecommendation(
+            'upload_max_filesize',
+            function () { return ini_get('upload_max_filesize') < ini_get('post_max_size'); },
+            true,
+            '"post_max_size" should be greater than "upload_max_filesize".',
+            'Set "<strong>post_max_size</strong>" to be greater than "<strong>upload_max_filesize</strong>".'
+        );
 
         $this->addRecommendation(
             class_exists('PDO'),
