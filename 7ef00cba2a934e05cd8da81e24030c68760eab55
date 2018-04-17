@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2017-12-18T16:00:11Z
+
+This package supports PHP 5.3+. So, I don't think we can remove anything.
+
+---------------------------------------------------------------------------
+
+by rosier at 2017-12-18T20:06:02Z
+
+The package runs on older PHP versions, but Symfony requires at least PHP v5.5.9. This is also checked by the requirements. That's why the recommendations for older PHP versions seem a bit redundant to me.
