@@ -38,7 +38,7 @@ class PhpConfigRequirement extends Requirement
 
         if (is_callable($evaluation)) {
             if (null === $testMessage || null === $helpHtml) {
-                throw new InvalidArgumentException('You must provide the parameters testMessage and helpHtml for a callback evaluation.');
+                throw new \InvalidArgumentException('You must provide the parameters testMessage and helpHtml for a callback evaluation.');
             }
 
             $fulfilled = call_user_func($evaluation, $cfgValue);
