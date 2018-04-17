@@ -41,12 +41,6 @@ class SymfonyRequirements extends RequirementCollection
         );
 
         $this->addRequirement(
-            version_compare($installedPhpVersion, '5.3.16', '!='),
-            'PHP version must not be 5.3.16 as Symfony won\'t work properly with it',
-            'Install PHP 5.3.17 or newer (or downgrade to an earlier PHP version)'
-        );
-
-        $this->addRequirement(
             is_dir($rootDir.'/vendor/composer'),
             'Vendor libraries must be installed',
             'Vendor libraries are missing. Install composer following instructions from <a href="http://getcomposer.org/">http://getcomposer.org/</a>. '.
@@ -193,38 +187,6 @@ class SymfonyRequirements extends RequirementCollection
         }
 
         /* optional recommendations follow */
-
-        $this->addRecommendation(
-            version_compare($installedPhpVersion, '5.3.4', '>='),
-            'You should use at least PHP 5.3.4 due to PHP bug #52083 in earlier versions',
-            'Your project might malfunction randomly due to PHP bug #52083 ("Notice: Trying to get property of non-object"). Install PHP 5.3.4 or newer.'
-        );
-
-        $this->addRecommendation(
-            version_compare($installedPhpVersion, '5.3.8', '>='),
-            'When using annotations you should have at least PHP 5.3.8 due to PHP bug #55156',
-            'Install PHP 5.3.8 or newer if your project uses annotations.'
-        );
-
-        $this->addRecommendation(
-            version_compare($installedPhpVersion, '5.4.0', '!='),
-            'You should not use PHP 5.4.0 due to the PHP bug #61453',
-            'Your project might not work properly due to the PHP bug #61453 ("Cannot dump definitions which have method calls"). Install PHP 5.4.1 or newer.'
-        );
-
-        $this->addRecommendation(
-            version_compare($installedPhpVersion, '5.4.11', '>='),
-            'When using the logout handler from the Symfony Security Component, you should have at least PHP 5.4.11 due to PHP bug #63379 (as a workaround, you can also set invalidate_session to false in the security logout handler configuration)',
-            'Install PHP 5.4.11 or newer if your project uses the logout handler from the Symfony Security Component.'
-        );
-
-        $this->addRecommendation(
-            (version_compare($installedPhpVersion, '5.3.18', '>=') && version_compare($installedPhpVersion, '5.4.0', '<'))
-            ||
-            version_compare($installedPhpVersion, '5.4.8', '>='),
-            'You should use PHP 5.3.18+ or PHP 5.4.8+ to always get nice error messages for fatal errors in the development environment due to PHP bug #61767/#60909',
-            'Install PHP 5.3.18+ or PHP 5.4.8+ if you want nice error messages for all fatal errors in the development environment.'
-        );
 
         if (null !== $pcreVersion) {
             $this->addRecommendation(
