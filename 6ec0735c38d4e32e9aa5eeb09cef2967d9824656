@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------
+
+by romain-pierre at 2017-08-04T00:20:50Z
+
+It's a good idea. But unfortunately the problem with the post size is hard to resolve. For example, with nginx and the `client_max_body_size` directive, there is still an error *before* the form component :-/
