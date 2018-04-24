@@ -21,6 +21,7 @@ if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
 }
 
 $lineSize = 70;
+$isVerbose = in_array('-v', $argv) || in_array('-vv', $argv) || in_array('-vvv', $argv);
 $symfonyRequirements = new SymfonyRequirements(dirname(dirname(realpath($autoloader))));
 $iniPath = $symfonyRequirements->getPhpIniPath();
 
@@ -28,22 +29,33 @@ echo_title('Symfony Requirements Checker');
 
 echo '> PHP is using the following php.ini file:'.PHP_EOL;
 if ($iniPath) {
-    echo_style('green', '  '.$iniPath);
+    echo_style('green', $iniPath);
 } else {
-    echo_style('yellow', '  WARNING: No configuration file (php.ini) used by PHP!');
+    echo_style('yellow', 'WARNING: No configuration file (php.ini) used by PHP!');
 }
 
 echo PHP_EOL.PHP_EOL;
 
-echo '> Checking Symfony requirements:'.PHP_EOL.'  ';
+echo '> Checking Symfony requirements:'.PHP_EOL;
 
 $messages = array();
 foreach ($symfonyRequirements->getRequirements() as $req) {
     if ($helpText = get_error_message($req, $lineSize)) {
-        echo_style('red', 'E');
+        if ($isVerbose) {
+            echo_style('red', '[ERROR] ');
+            echo $req->getTestMessage().PHP_EOL;
+        } else {
+            echo_style('red', 'E');
+        }
+
         $messages['error'][] = $helpText;
     } else {
-        echo_style('green', '.');
+        if ($isVerbose) {
+            echo_style('green', '[OK] ');
+            echo $req->getTestMessage().PHP_EOL;
+        } else {
+            echo_style('green', '.');
+        }
     }
 }
 
@@ -51,10 +63,21 @@ $checkPassed = empty($messages['error']);
 
 foreach ($symfonyRequirements->getRecommendations() as $req) {
     if ($helpText = get_error_message($req, $lineSize)) {
-        echo_style('yellow', 'W');
+        if ($isVerbose) {
+            echo_style('yellow', '[WARN] ');
+            echo $req->getTestMessage().PHP_EOL;
+        } else {
+            echo_style('yellow', 'W');
+        }
+
         $messages['warning'][] = $helpText;
     } else {
-        echo_style('green', '.');
+        if ($isVerbose) {
+            echo_style('green', '[OK] ');
+            echo $req->getTestMessage().PHP_EOL;
+        } else {
+            echo_style('green', '.');
+        }
     }
 }
 
