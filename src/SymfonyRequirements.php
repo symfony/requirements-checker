@@ -332,7 +332,7 @@ class SymfonyRequirements extends RequirementCollection
 
         $this->addPhpConfigRecommendation(
             'post_max_size',
-            function () { return ini_get('post_max_size') < ini_get('memory_limit'); },
+            $this->getPostMaxSize() < $this->getMemoryLimit(),
             true,
             '"memory_limit" should be greater than "post_max_size".',
             'Set "<strong>memory_limit</strong>" to be greater than "<strong>post_max_size</strong>".'
@@ -340,7 +340,7 @@ class SymfonyRequirements extends RequirementCollection
 
         $this->addPhpConfigRecommendation(
             'upload_max_filesize',
-            function () { return ini_get('upload_max_filesize') < ini_get('post_max_size'); },
+            $this->getUploadMaxFilesize() < $this->getPostMaxSize(),
             true,
             '"post_max_size" should be greater than "upload_max_filesize".',
             'Set "<strong>post_max_size</strong>" to be greater than "<strong>upload_max_filesize</strong>".'
@@ -363,21 +363,33 @@ class SymfonyRequirements extends RequirementCollection
     }
 
     /**
-     * Loads realpath_cache_size from php.ini and converts it to int.
-     *
+     * Convert a given shorthand size in an integer
      * (e.g. 16k is converted to 16384 int)
      *
-     * @return int
+     * @param string $size - Shorthand size
+     *
+     * @see http://www.php.net/manual/en/faq.using.php#faq.using.shorthandbytes
+     *
+     * @return int - Converted size
      */
-    private function getRealpathCacheSize()
+    private function convertShorthandSize($size)
     {
-        $size = ini_get('realpath_cache_size');
+        // Initialize
         $size = trim($size);
         $unit = '';
+
+        // Check unlimited alias
+        if ($size === '-1') {
+            return \INF;
+        }
+
+        // Check size
         if (!ctype_digit($size)) {
             $unit = strtolower(substr($size, -1, 1));
             $size = (int) substr($size, 0, -1);
         }
+
+        // Return converted size
         switch ($unit) {
             case 'g':
                 return $size * 1024 * 1024 * 1024;
@@ -388,6 +400,48 @@ class SymfonyRequirements extends RequirementCollection
             default:
                 return (int) $size;
         }
+    }
+
+    /**
+     * Loads realpath_cache_size from php.ini and converts it to int.
+     *
+     * (e.g. 16k is converted to 16384 int)
+     *
+     * @return int
+     */
+    private function getRealpathCacheSize()
+    {
+        return $this->convertShorthandSize(ini_get('realpath_cache_size'));
+    }
+
+    /**
+     * Loads post_max_size from php.ini and converts it to int.
+     *
+     * @return int
+     */
+    private function getPostMaxSize()
+    {
+        return $this->convertShorthandSize(ini_get('post_max_size'));
+    }
+
+    /**
+     * Loads memory_limit from php.ini and converts it to int.
+     *
+     * @return int
+     */
+    private function getMemoryLimit()
+    {
+        return $this->convertShorthandSize(ini_get('memory_limit'));
+    }
+
+    /**
+     * Loads upload_max_filesize from php.ini and converts it to int.
+     *
+     * @return int
+     */
+    private function getUploadMaxFilesize()
+    {
+        return $this->convertShorthandSize(ini_get('upload_max_filesize'));
     }
 
     private function getComposerRootDir($rootDir)
