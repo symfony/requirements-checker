@@ -31,7 +31,9 @@ if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
     throw new \RuntimeException('Unable to find the Composer autoloader.');
 }
 
-$symfonyRequirements = new SymfonyRequirements(dirname(dirname(realpath($autoloader))));
+$symfonyVersion = class_exists('\Symfony\Component\HttpKernel\Kernel') ? \Symfony\Component\HttpKernel\Kernel::VERSION : null;
+
+$symfonyRequirements = new SymfonyRequirements(dirname(dirname(realpath($autoloader))), $symfonyVersion);
 
 $majorProblems = $symfonyRequirements->getFailedRequirements();
 $minorProblems = $symfonyRequirements->getFailedRecommendations();

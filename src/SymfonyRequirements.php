@@ -20,9 +20,10 @@ namespace Symfony\Requirements;
  */
 class SymfonyRequirements extends RequirementCollection
 {
-    const REQUIRED_PHP_VERSION = '5.5.9';
+    const REQUIRED_PHP_VERSION_3x = '5.5.9';
+    const REQUIRED_PHP_VERSION_4x = '7.1.3';
 
-    public function __construct($rootDir)
+    public function __construct($rootDir, $symfonyVersion = null)
     {
         /* mandatory requirements follow */
 
@@ -31,20 +32,22 @@ class SymfonyRequirements extends RequirementCollection
         $rootDir = $this->getComposerRootDir($rootDir);
         $options = $this->readComposer($rootDir);
 
+        $phpVersion = $symfonyVersion && version_compare($symfonyVersion, '4.0.0', '>=') ? self::REQUIRED_PHP_VERSION_4x : self::REQUIRED_PHP_VERSION_3x;
+
         $this->addRequirement(
-            version_compare($installedPhpVersion, self::REQUIRED_PHP_VERSION, '>='),
-            sprintf('PHP version must be at least %s (%s installed)', self::REQUIRED_PHP_VERSION, $installedPhpVersion),
+            version_compare($installedPhpVersion, $phpVersion, '>='),
+            sprintf('PHP version must be at least %s (%s installed)', $phpVersion, $installedPhpVersion),
             sprintf('You are running PHP version "<strong>%s</strong>", but Symfony needs at least PHP "<strong>%s</strong>" to run.
             Before using Symfony, upgrade your PHP installation, preferably to the latest version.',
-                $installedPhpVersion, self::REQUIRED_PHP_VERSION),
-            sprintf('Install PHP %s or newer (installed version is %s)', self::REQUIRED_PHP_VERSION, $installedPhpVersion)
+                $installedPhpVersion, $phpVersion),
+            sprintf('Install PHP %s or newer (installed version is %s)', $phpVersion, $installedPhpVersion)
         );
 
         $this->addRequirement(
             is_dir($rootDir.'/vendor/composer'),
             'Vendor libraries must be installed',
             'Vendor libraries are missing. Install composer following instructions from <a href="http://getcomposer.org/">http://getcomposer.org/</a>. '.
-                'Then run "<strong>php composer.phar install</strong>" to install them.'
+            'Then run "<strong>php composer.phar install</strong>" to install them.'
         );
 
         if (is_dir($cacheDir = $rootDir.'/'.$options['var-dir'].'/cache')) {
@@ -71,7 +74,7 @@ class SymfonyRequirements extends RequirementCollection
             );
         }
 
-        if (version_compare($installedPhpVersion, self::REQUIRED_PHP_VERSION, '>=')) {
+        if (version_compare($installedPhpVersion, $phpVersion, '>=')) {
             $this->addRequirement(
                 in_array(@date_default_timezone_get(), \DateTimeZone::listIdentifiers(), true),
                 sprintf('Configured default timezone "%s" must be supported by your installation of PHP', @date_default_timezone_get()),
@@ -474,4 +477,4 @@ class SymfonyRequirements extends RequirementCollection
 
         return $options;
     }
- }
+}

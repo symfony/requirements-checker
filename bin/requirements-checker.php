@@ -22,7 +22,10 @@ if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
 
 $lineSize = 70;
 $isVerbose = in_array('-v', $argv) || in_array('-vv', $argv) || in_array('-vvv', $argv);
-$symfonyRequirements = new SymfonyRequirements(dirname(dirname(realpath($autoloader))));
+
+$symfonyVersion = class_exists('\Symfony\Component\HttpKernel\Kernel') ? \Symfony\Component\HttpKernel\Kernel::VERSION : null;
+
+$symfonyRequirements = new SymfonyRequirements(dirname(dirname(realpath($autoloader))), $symfonyVersion);
 $iniPath = $symfonyRequirements->getPhpIniPath();
 
 echo_title('Symfony Requirements Checker');
