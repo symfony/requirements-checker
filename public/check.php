@@ -372,7 +372,7 @@ $hasMinorProblems = (bool) count($minorProblems);
                     <div class="symfony-block-content">
                         <h1 class="title">Configuration Checker</h1>
                         <p>
-                            This script analyzes your system to check whether is
+                            This script analyzes your system to check whether it’s
                             ready to run Symfony applications.
                         </p>
 
