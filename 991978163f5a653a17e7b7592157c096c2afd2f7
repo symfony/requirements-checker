@@ -1,0 +1,44 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2019-06-25T11:42:32Z
+
+You did not renamed the file which is still named `check.php`, right?
+
+---------------------------------------------------------------------------
+
+by ro0NL at 2019-06-25T13:07:54Z
+
+Correct. Having `check.php` by default is fine.
+
+But consider doing
+
+```
+mv public/index.php public/index.php.orig && \
+mv public/check.php public/index.php
+```
+
+so we can quickly leverage the current NGINX configuration and verify the web-checks. At this point the HTML link still points to `/check.php` which will be 404.
+
+Once good we revert `mv public/index.php.orig public/index.php`
+
+---------------------------------------------------------------------------
+
+by ro0NL at 2019-06-25T13:08:30Z
+
+Alternatively we can remove the link in favor of a refresh (F5) :man_shrugging:
+
+---------------------------------------------------------------------------
+
+by fabpot at 2019-06-25T15:32:01Z
+
+Refresh sounds better to me.
+
+---------------------------------------------------------------------------
+
+by ro0NL at 2019-06-25T16:36:37Z
+
+Agree.. that allows us to opt-out from any logic :)
+
+Now done.
+
+![image](https://user-images.githubusercontent.com/1047696/60116346-27233800-9778-11e9-9759-8caa7a6b9caa.png)
