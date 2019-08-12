@@ -11,6 +11,8 @@
 
 namespace Symfony\Requirements;
 
+require_once __DIR__.'/Requirement.php';
+
 /**
  * Represents a requirement in form of a PHP configuration option.
  *

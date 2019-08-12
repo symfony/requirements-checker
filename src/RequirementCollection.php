@@ -11,6 +11,8 @@
 
 namespace Symfony\Requirements;
 
+require_once __DIR__.'/PhpConfigRequirement.php';
+
 /**
  * A RequirementCollection represents a set of Requirement instances.
  *
@@ -207,15 +209,5 @@ class RequirementCollection implements \IteratorAggregate
         }
 
         return false;
-    }
-
-    /**
-     * Returns the PHP configuration file (php.ini) path.
-     *
-     * @return string|false php.ini file path
-     */
-    public function getPhpIniPath()
-    {
-        return get_cfg_var('cfg_file_path');
     }
 }

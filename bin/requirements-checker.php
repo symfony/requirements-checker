@@ -9,31 +9,38 @@
  * file that was distributed with this source code.
  */
 
+require_once dirname(__DIR__).'/src/Requirement.php';
+require_once dirname(__DIR__).'/src/SymfonyRequirements.php';
+require_once dirname(__DIR__).'/src/ProjectRequirements.php';
+
 use Symfony\Requirements\Requirement;
 use Symfony\Requirements\SymfonyRequirements;
-
-if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
-    require_once $autoloader;
-} elseif (file_exists($autoloader = __DIR__.'/../vendor/autoload.php')) {
-    require_once $autoloader;
-} else {
-    throw new \RuntimeException('Unable to find the Composer autoloader.');
-}
+use Symfony\Requirements\ProjectRequirements;
 
 $lineSize = 70;
-$isVerbose = in_array('-v', $argv) || in_array('-vv', $argv) || in_array('-vvv', $argv);
+$args = array();
+$isVerbose = false;
+foreach ($argv as $arg) {
+    if ('-v' === $arg || '-vv' === $arg || '-vvv' === $arg) {
+        $isVerbose = true;
+    } else {
+        $args[] = $arg;
+    }
+}
 
-$symfonyVersion = class_exists('\Symfony\Component\HttpKernel\Kernel') ? \Symfony\Component\HttpKernel\Kernel::VERSION : null;
+$symfonyRequirements = new SymfonyRequirements();
+$requirements = $symfonyRequirements->getRequirements();
 
-$dir = isset($argv[1]) ? $argv[1] : dirname(dirname(realpath($autoloader)));
-
-$symfonyRequirements = new SymfonyRequirements($dir, $symfonyVersion);
-$iniPath = $symfonyRequirements->getPhpIniPath();
+// specific directory to check?
+if (isset($args[1])) {
+    $projectRequirements = new ProjectRequirements($args[1]);
+    $requirements = array_merge($requirements, $projectRequirements->getRequirements());
+}
 
 echo_title('Symfony Requirements Checker');
 
 echo '> PHP is using the following php.ini file:'.PHP_EOL;
-if ($iniPath) {
+if ($iniPath = get_cfg_var('cfg_file_path')) {
     echo_style('green', $iniPath);
 } else {
     echo_style('yellow', 'WARNING: No configuration file (php.ini) used by PHP!');
@@ -41,10 +48,10 @@ if ($iniPath) {
 
 echo PHP_EOL.PHP_EOL;
 
-echo '> Checking Symfony requirements:'.PHP_EOL;
+echo '> Checking Symfony requirements:'.PHP_EOL.PHP_EOL;
 
 $messages = array();
-foreach ($symfonyRequirements->getRequirements() as $req) {
+foreach ($requirements as $req) {
     if ($helpText = get_error_message($req, $lineSize)) {
         if ($isVerbose) {
             echo_style('red', '[ERROR] ');
@@ -105,17 +112,6 @@ if (!empty($messages['warning'])) {
         echo ' * '.$helpText.PHP_EOL;
     }
 }
-
-echo PHP_EOL;
-echo_style('title', 'Note');
-echo '  The command console could use a different php.ini file'.PHP_EOL;
-echo_style('title', '~~~~');
-echo '  than the one used with your web server. To be on the'.PHP_EOL;
-echo '      safe side, please check the requirements from your web'.PHP_EOL;
-echo '      server using the ';
-echo_style('yellow', 'public/check.php');
-echo ' script.'.PHP_EOL;
-echo PHP_EOL;
 
 exit($checkPassed ? 0 : 1);
 
