@@ -22,6 +22,7 @@ class SymfonyRequirements extends RequirementCollection
 {
     const REQUIRED_PHP_VERSION_3x = '5.5.9';
     const REQUIRED_PHP_VERSION_4x = '7.1.3';
+    const REQUIRED_PHP_VERSION_5x = '7.2.9';
 
     public function __construct($rootDir, $symfonyVersion = null)
     {
@@ -32,7 +33,14 @@ class SymfonyRequirements extends RequirementCollection
         $rootDir = $this->getComposerRootDir($rootDir);
         $options = $this->readComposer($rootDir);
 
-        $phpVersion = $symfonyVersion && version_compare($symfonyVersion, '4.0.0', '>=') ? self::REQUIRED_PHP_VERSION_4x : self::REQUIRED_PHP_VERSION_3x;
+        $phpVersion = self::REQUIRED_PHP_VERSION_3x;
+        if (null !== $symfonyVersion) {
+            if (version_compare($symfonyVersion, '5.0.0', '>=')) {
+                $phpVersion = self::REQUIRED_PHP_VERSION_5x;
+            } elseif (version_compare($symfonyVersion, '4.0.0', '>=')) {
+                $phpVersion = self::REQUIRED_PHP_VERSION_4x;
+            }
+        }
 
         $this->addRequirement(
             version_compare($installedPhpVersion, $phpVersion, '>='),
