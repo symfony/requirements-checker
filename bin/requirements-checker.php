@@ -32,8 +32,9 @@ $symfonyRequirements = new SymfonyRequirements();
 $requirements = $symfonyRequirements->getRequirements();
 
 // specific directory to check?
-if (isset($args[1])) {
-    $projectRequirements = new ProjectRequirements($args[1]);
+$dir = isset($args[1]) ? $args[1] : (file_exists(getcwd().'/composer.json') ? getcwd().'/composer.json' : null);
+if (null !== $dir) {
+    $projectRequirements = new ProjectRequirements($dir);
     $requirements = array_merge($requirements, $projectRequirements->getRequirements());
 }
 
