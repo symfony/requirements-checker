@@ -44,7 +44,7 @@ class SymfonyRequirements extends RequirementCollection
         );
 
         $this->addRequirement(
-            is_dir($rootDir.'/vendor/composer'),
+            is_dir($rootDir.'/'.$options['vendor-dir'].'/composer'),
             'Vendor libraries must be installed',
             'Vendor libraries are missing. Install composer following instructions from <a href="http://getcomposer.org/">http://getcomposer.org/</a>. '.
             'Then run "<strong>php composer.phar install</strong>" to install them.'
@@ -464,6 +464,7 @@ class SymfonyRequirements extends RequirementCollection
             'src-dir' => 'src',
             'var-dir' => 'var',
             'public-dir' => 'public',
+            'vendor-dir' => 'vendor'
         );
 
         foreach (array_keys($options) as $key) {
@@ -471,8 +472,9 @@ class SymfonyRequirements extends RequirementCollection
                 $options[$key] = $composer['extra'][$key];
             } elseif (isset($composer['extra']['symfony-'.$key])) {
                 $options[$key] = $composer['extra']['symfony-'.$key];
+            } elseif (isset($composer['config'][$key])) {
+                $options[$key] = $composer['config'][$key];
             }
-
         }
 
         return $options;
