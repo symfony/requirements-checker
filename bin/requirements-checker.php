@@ -11,6 +11,7 @@
 
 use Symfony\Requirements\Requirement;
 use Symfony\Requirements\SymfonyRequirements;
+use Symfony\Requirements\ProjectRequirements;
 
 if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
     require_once $autoloader;
@@ -21,6 +22,7 @@ if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
     require_once dirname(__DIR__).'/src/RequirementCollection.php';
     require_once dirname(__DIR__).'/src/PhpConfigRequirement.php';
     require_once dirname(__DIR__).'/src/SymfonyRequirements.php';
+    require_once dirname(__DIR__).'/src/ProjectRequirements.php';
 }
 
 $lineSize = 70;
@@ -34,18 +36,20 @@ foreach ($argv as $arg) {
     }
 }
 
-$symfonyVersion = class_exists('\Symfony\Component\HttpKernel\Kernel') ? \Symfony\Component\HttpKernel\Kernel::VERSION : null;
+$symfonyRequirements = new SymfonyRequirements();
+$requirements = $symfonyRequirements->getRequirements();
 
 // specific directory to check?
 $dir = isset($args[1]) ? $args[1] : dirname(dirname(realpath($autoloader)));
-
-$symfonyRequirements = new SymfonyRequirements($dir, $symfonyVersion);
-$iniPath = $symfonyRequirements->getPhpIniPath();
+if (null !== $dir) {
+    $projectRequirements = new ProjectRequirements($dir);
+    $requirements = array_merge($requirements, $projectRequirements->getRequirements());
+}
 
 echo_title('Symfony Requirements Checker');
 
 echo '> PHP is using the following php.ini file:'.PHP_EOL;
-if ($iniPath) {
+if ($iniPath = get_cfg_var('cfg_file_path')) {
     echo_style('green', $iniPath);
 } else {
     echo_style('yellow', 'WARNING: No configuration file (php.ini) used by PHP!');
@@ -53,10 +57,10 @@ if ($iniPath) {
 
 echo PHP_EOL.PHP_EOL;
 
-echo '> Checking Symfony requirements:'.PHP_EOL;
+echo '> Checking Symfony requirements:'.PHP_EOL.PHP_EOL;
 
 $messages = array();
-foreach ($symfonyRequirements->getRequirements() as $req) {
+foreach ($requirements as $req) {
     if ($helpText = get_error_message($req, $lineSize)) {
         if ($isVerbose) {
             echo_style('red', '[ERROR] ');
