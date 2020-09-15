@@ -1,0 +1,14 @@
+---------------------------------------------------------------------------
+
+by Tobion at 2019-10-23T14:36:09Z
+
+There also seems to be an edge case
+
+> post_max_size = 0 will not disable the limit when the content type is application/x-www-form-urlencoded or is not registered with PHP
+https://www.php.net/manual/en/ini.core.php#ini.post-max-size
+
+---------------------------------------------------------------------------
+
+by gnutix at 2019-11-06T20:22:44Z
+
+I can't see how we could test for this edge case... Do you? I've removed the PHP 7.4+ code, thanks for noticing!
