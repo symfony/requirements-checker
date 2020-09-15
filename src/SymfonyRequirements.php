@@ -345,7 +345,7 @@ class SymfonyRequirements extends RequirementCollection
                 $postMaxSize = $this->getPostMaxSize();
                 $uploadMaxFilesize = $this->getUploadMaxFilesize();
 
-                return \INF === $postMaxSize || \INFO === $uploadMaxFilesize || $postMaxSize > $uploadMaxFilesize;
+                return \INF === $postMaxSize || \INF === $uploadMaxFilesize || $postMaxSize > $uploadMaxFilesize;
             },
             true,
             '"post_max_size" should be greater than "upload_max_filesize".',
