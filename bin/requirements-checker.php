@@ -21,11 +21,22 @@ if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
 }
 
 $lineSize = 70;
-$isVerbose = in_array('-v', $argv) || in_array('-vv', $argv) || in_array('-vvv', $argv);
+$args = array();
+$isVerbose = false;
+foreach ($argv as $arg) {
+    if ('-v' === $arg || '-vv' === $arg || '-vvv' === $arg) {
+        $isVerbose = true;
+    } else {
+        $args[] = $arg;
+    }
+}
 
 $symfonyVersion = class_exists('\Symfony\Component\HttpKernel\Kernel') ? \Symfony\Component\HttpKernel\Kernel::VERSION : null;
 
-$symfonyRequirements = new SymfonyRequirements(dirname(dirname(realpath($autoloader))), $symfonyVersion);
+// specific directory to check?
+$dir = isset($args[1]) ? $args[1] : dirname(dirname(realpath($autoloader)));
+
+$symfonyRequirements = new SymfonyRequirements($dir, $symfonyVersion);
 $iniPath = $symfonyRequirements->getPhpIniPath();
 
 echo_title('Symfony Requirements Checker');
