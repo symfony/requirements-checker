@@ -464,7 +464,7 @@ class SymfonyRequirements extends RequirementCollection
             'src-dir' => 'src',
             'var-dir' => 'var',
             'public-dir' => 'public',
-            'vendor-dir' => 'vendor'
+            'vendor-dir' => 'vendor',
         );
 
         foreach (array_keys($options) as $key) {
