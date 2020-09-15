@@ -17,7 +17,10 @@ if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
 } elseif (file_exists($autoloader = __DIR__.'/../vendor/autoload.php')) {
     require_once $autoloader;
 } else {
-    throw new \RuntimeException('Unable to find the Composer autoloader.');
+    require_once dirname(__DIR__).'/src/Requirement.php';
+    require_once dirname(__DIR__).'/src/RequirementCollection.php';
+    require_once dirname(__DIR__).'/src/PhpConfigRequirement.php';
+    require_once dirname(__DIR__).'/src/SymfonyRequirements.php';
 }
 
 $lineSize = 70;
