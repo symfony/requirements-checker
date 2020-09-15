@@ -328,7 +328,12 @@ class SymfonyRequirements extends RequirementCollection
 
         $this->addPhpConfigRecommendation(
             'post_max_size',
-            $this->getPostMaxSize() < $this->getMemoryLimit(),
+            function () {
+                $memoryLimit = $this->getMemoryLimit();
+                $postMaxSize = $this->getPostMaxSize();
+
+                return \INF === $memoryLimit || \INF === $postMaxSize || $memoryLimit > $postMaxSize;
+            },
             true,
             '"memory_limit" should be greater than "post_max_size".',
             'Set "<strong>memory_limit</strong>" to be greater than "<strong>post_max_size</strong>".'
@@ -336,7 +341,12 @@ class SymfonyRequirements extends RequirementCollection
 
         $this->addPhpConfigRecommendation(
             'upload_max_filesize',
-            $this->getUploadMaxFilesize() < $this->getPostMaxSize(),
+            function () {
+                $postMaxSize = $this->getPostMaxSize();
+                $uploadMaxFilesize = $this->getUploadMaxFilesize();
+
+                return \INF === $postMaxSize || \INFO === $uploadMaxFilesize || $postMaxSize > $uploadMaxFilesize;
+            },
             true,
             '"post_max_size" should be greater than "upload_max_filesize".',
             'Set "<strong>post_max_size</strong>" to be greater than "<strong>upload_max_filesize</strong>".'
@@ -363,19 +373,20 @@ class SymfonyRequirements extends RequirementCollection
      * (e.g. 16k is converted to 16384 int)
      *
      * @param string $size - Shorthand size
+     * @param string $infiniteValue - The infinite value for this setting
      *
      * @see http://www.php.net/manual/en/faq.using.php#faq.using.shorthandbytes
      *
      * @return int - Converted size
      */
-    private function convertShorthandSize($size)
+    private function convertShorthandSize($size, $infiniteValue = '-1')
     {
         // Initialize
         $size = trim($size);
         $unit = '';
 
         // Check unlimited alias
-        if ($size === '-1') {
+        if ($size === $infiniteValue) {
             return \INF;
         }
 
@@ -417,7 +428,7 @@ class SymfonyRequirements extends RequirementCollection
      */
     private function getPostMaxSize()
     {
-        return $this->convertShorthandSize(ini_get('post_max_size'));
+        return $this->convertShorthandSize(ini_get('post_max_size'), '0');
     }
 
     /**
@@ -437,7 +448,7 @@ class SymfonyRequirements extends RequirementCollection
      */
     private function getUploadMaxFilesize()
     {
-        return $this->convertShorthandSize(ini_get('upload_max_filesize'));
+        return $this->convertShorthandSize(ini_get('upload_max_filesize'), '0');
     }
 
     private function getComposerRootDir($rootDir)
