@@ -178,11 +178,30 @@ function has_color_support()
     static $support;
 
     if (null === $support) {
-        if (DIRECTORY_SEPARATOR == '\\') {
-            $support = false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI');
-        } else {
-            $support = function_exists('posix_isatty') && @posix_isatty(STDOUT);
+
+        if ('Hyper' === getenv('TERM_PROGRAM')) {
+            return $support = true;
         }
+
+        if (DIRECTORY_SEPARATOR === '\\') {
+            return  $support = (function_exists('sapi_windows_vt100_support')
+                && @sapi_windows_vt100_support(STDOUT))
+                || false !== getenv('ANSICON')
+                || 'ON' === getenv('ConEmuANSI')
+                || 'xterm' === getenv('TERM');
+        }
+
+        if (function_exists('stream_isatty')) {
+            return $support = @stream_isatty(STDOUT);
+        }
+
+        if (function_exists('posix_isatty')) {
+            return $support = @posix_isatty(STDOUT);
+        }
+
+        $stat = @fstat(STDOUT);
+        // Check if formatted mode is S_IFCHR
+        return $support = ( $stat ? 0020000 === ($stat['mode'] & 0170000) : false );
     }
 
     return $support;
