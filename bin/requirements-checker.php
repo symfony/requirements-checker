@@ -17,7 +17,7 @@ if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
     require_once $autoloader;
 } elseif (file_exists($autoloader = __DIR__.'/../vendor/autoload.php')) {
     require_once $autoloader;
-} else {
+} elseif (!class_exists('Symfony\Requirements\Requirement', false)) {
     require_once dirname(__DIR__).'/src/Requirement.php';
     require_once dirname(__DIR__).'/src/RequirementCollection.php';
     require_once dirname(__DIR__).'/src/PhpConfigRequirement.php';
