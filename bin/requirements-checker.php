@@ -120,13 +120,11 @@ if (!empty($messages['warning'])) {
 
 echo PHP_EOL;
 echo_style('title', 'Note');
-echo '  The command console could use a different php.ini file'.PHP_EOL;
+echo '  The command console can use a different php.ini file'.PHP_EOL;
 echo_style('title', '~~~~');
-echo '  than the one used with your web server. To be on the'.PHP_EOL;
-echo '      safe side, please check the requirements from your web'.PHP_EOL;
-echo '      server using the ';
-echo_style('yellow', 'public/check.php');
-echo ' script.'.PHP_EOL;
+echo '  than the one used by your web server.'.PHP_EOL;
+echo '      Please check that both the console and the web server'.PHP_EOL;
+echo '      are using the same PHP version and configuration.'.PHP_EOL;
 echo PHP_EOL;
 
 exit($checkPassed ? 0 : 1);
