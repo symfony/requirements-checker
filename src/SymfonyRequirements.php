@@ -322,12 +322,12 @@ class SymfonyRequirements extends RequirementCollection
      * Convert a given shorthand size in an integer
      * (e.g. 16k is converted to 16384 int)
      *
-     * @param string $size - Shorthand size
-     * @param string $infiniteValue - The infinite value for this setting
+     * @param string $size Shorthand size
+     * @param string $infiniteValue The infinite value for this setting
      *
      * @see http://www.php.net/manual/en/faq.using.php#faq.using.shorthandbytes
      *
-     * @return int - Converted size
+     * @return float Converted size
      */
     private function convertShorthandSize($size, $infiniteValue = '-1')
     {
@@ -364,7 +364,7 @@ class SymfonyRequirements extends RequirementCollection
      *
      * (e.g. 16k is converted to 16384 int)
      *
-     * @return int
+     * @return float
      */
     private function getRealpathCacheSize()
     {
@@ -374,7 +374,7 @@ class SymfonyRequirements extends RequirementCollection
     /**
      * Loads post_max_size from php.ini and converts it to int.
      *
-     * @return int
+     * @return float
      */
     private function getPostMaxSize()
     {
@@ -384,7 +384,7 @@ class SymfonyRequirements extends RequirementCollection
     /**
      * Loads memory_limit from php.ini and converts it to int.
      *
-     * @return int
+     * @return float
      */
     private function getMemoryLimit()
     {
@@ -394,7 +394,7 @@ class SymfonyRequirements extends RequirementCollection
     /**
      * Loads upload_max_filesize from php.ini and converts it to int.
      *
-     * @return int
+     * @return float
      */
     private function getUploadMaxFilesize()
     {
