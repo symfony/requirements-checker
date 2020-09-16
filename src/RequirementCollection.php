@@ -192,30 +192,4 @@ class RequirementCollection implements \IteratorAggregate
 
         return $array;
     }
-
-    /**
-     * Returns whether a PHP configuration option is not correct.
-     *
-     * @return bool php.ini configuration problem?
-     */
-    public function hasPhpConfigIssue()
-    {
-        foreach ($this->requirements as $req) {
-            if (!$req->isFulfilled() && $req instanceof PhpConfigRequirement) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns the PHP configuration file (php.ini) path.
-     *
-     * @return string|false php.ini file path
-     */
-    public function getPhpIniPath()
-    {
-        return get_cfg_var('cfg_file_path');
-    }
 }
