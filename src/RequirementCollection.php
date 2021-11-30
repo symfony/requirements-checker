@@ -16,22 +16,12 @@ namespace Symfony\Requirements;
  *
  * @author Tobias Schultze <http://tobion.de>
  */
-class RequirementCollection implements \IteratorAggregate
+class RequirementCollection
 {
     /**
      * @var Requirement[]
      */
     private $requirements = array();
-
-    /**
-     * Gets the current RequirementCollection as an Iterator.
-     *
-     * @return \Traversable A Traversable interface
-     */
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->requirements);
-    }
 
     /**
      * Adds a Requirement.
