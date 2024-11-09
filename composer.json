@@ -18,10 +18,5 @@
     ],
     "autoload": {
         "psr-4": { "Symfony\\Requirements\\": "src/" }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-main": "2.0.x-dev"
-        }
     }
 }
