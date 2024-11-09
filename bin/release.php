@@ -16,4 +16,4 @@ foreach ([
 $contents = str_replace('<?php', '', $contents);
 $contents = preg_replace('{^require_once .+$}m', '', $contents);
 
-file_put_contents($root.'/check-requirements.php', "<?php\n".$contents);
+echo "<?php\n".$contents;
